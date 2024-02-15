@@ -31,17 +31,75 @@ const KanbanColumn = ({
   // column background will change when a card is dragged onto it
   function handleDragOver(event: DragEvent<HTMLDivElement>) {
     event.preventDefault();
+    highlightIndicator(event);
     setActive(true);
   }
 
   // column background returns to normal when a card is dragged out
   function handleDragLeave() {
     setActive(false);
+    clearHighlights();
   }
 
   // column background returns to normal when a card is dropped on it
   function handleDragEnd() {
     setActive(false);
+    clearHighlights();
+  }
+
+  // highlight indicator of cards
+  function highlightIndicator(event: DragEvent<HTMLDivElement>) {
+    const indicators = getIndicators() as HTMLElement[];
+    clearHighlights(indicators);
+    const el = getNearestIndicator(event, indicators);
+    el.element.style.opacity = '1';
+  }
+
+  // get indicators from current column and turn them to array
+  function getIndicators() {
+    return Array.from(document.querySelectorAll(`[data-column="${column}"]`));
+  }
+
+  // get the nearest indicator of column
+  function getNearestIndicator(
+    event: DragEvent<HTMLDivElement>,
+    indicators: HTMLElement[],
+  ) {
+    const DISTANCE_OFFSET = 50;
+
+    // reduce indicators to the find the closest
+    const el = indicators.reduce(
+      (closest, child) => {
+        // getting the position of the indicator on page
+        const box = child.getBoundingClientRect();
+
+        // calculate the offset between the mouse and wherever that top is
+        // we don't really have any buffer at very top of our column
+        // so we can hover anywhere about that
+        // so for fix that, we added a little bit of offset
+        const offset = event.clientY - (box.top + DISTANCE_OFFSET);
+
+        if (offset < 0 && offset > closest.offset) {
+          return { offset: offset, element: child };
+        } else {
+          return closest;
+        }
+      },
+      {
+        offset: Number.NEGATIVE_INFINITY,
+        element: indicators[indicators.length - 1],
+      },
+    );
+
+    return el;
+  }
+
+  function clearHighlights(elements?: HTMLElement[]) {
+    const indicators = (elements || getIndicators()) as HTMLElement[];
+
+    for (const indicator of indicators) {
+      indicator.style.opacity = '0';
+    }
   }
 
   // Filter card props: Each column gets its own set of individual cards.
