@@ -42,9 +42,54 @@ const KanbanColumn = ({
   }
 
   // column background returns to normal when a card is dropped on it
-  function handleDragEnd() {
+  function handleDragEnd(event: DragEvent<HTMLDivElement>) {
     setActive(false);
     clearHighlights();
+
+    // get card id from dropped card
+    const cardId = event.dataTransfer.getData('cardId');
+
+    // get indicators of dropped column
+    const indicators = getIndicators() as HTMLElement[];
+
+    // get nearest indicator of dragged card on current column
+    const { element } = getNearestIndicator(event, indicators);
+
+    // this is (we set before for every highlight) linked to whatever
+    // card is nearest to where we were hovering
+    // if we don't have one, by default we use -1
+    // -1 is indicate the very end of the list
+    const before = element.dataset.before || '-1';
+
+    // if before is equal to whatever the card ID that means you are trying
+    // put it in front of itself
+    if (before !== cardId) {
+      let newCards = [...cards];
+
+      // get card by the card id
+      let cardToTransfer = newCards.find((card) => card.id === cardId);
+      if (!cardToTransfer) return;
+
+      // update card column. maybe we drag the card to new column
+      cardToTransfer = { ...cardToTransfer, column };
+
+      // kick out the card from the old column
+      newCards = newCards.filter((card) => card.id !== cardId);
+
+      const moveToBack = before === '-1';
+
+      // if its same column
+      if (moveToBack) {
+        newCards.push(cardToTransfer);
+      } else {
+        const insertAtIndex = newCards.findIndex((card) => card.id === before);
+        if (insertAtIndex === undefined) return;
+
+        newCards.splice(insertAtIndex, 0, cardToTransfer);
+      }
+
+      setCards(newCards);
+    }
   }
 
   // highlight indicator of cards
@@ -102,7 +147,7 @@ const KanbanColumn = ({
     }
   }
 
-  // Filter card props: Each column gets its own set of individual cards.
+  // Filter card props: Each column gets its own set of individual cards
   const filteredCards = cards.filter((card) => card.column === column);
   return (
     <div className="flex flex-col shrink-0">
@@ -116,7 +161,7 @@ const KanbanColumn = ({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDragEnd}
-        className={`h-full w-full transition-colors p-3 rounded-md ${active ? 'bg-black' : 'bg-[#262626]'}`}
+        className={`h-full w-full transition-colors p-3 rounded-md ${active ? 'bg-[#1d1d1d]' : 'bg-[#262626]'}`}
       >
         {filteredCards.map((card) => (
           <KanbanCard
