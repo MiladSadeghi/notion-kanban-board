@@ -1,4 +1,4 @@
-import { DropIndicator, KanbanCard } from '@components';
+import { DropIndicator, KanbanAddCard, KanbanCard } from '@components';
 import { useState } from 'react';
 
 type Props = {
@@ -6,10 +6,17 @@ type Props = {
   column: 'backlog' | 'todo' | 'doing' | 'done';
   headingColor: string;
   cards: IKanbanInfo[];
+  setCards: TSetState<IKanbanInfo[]>;
 };
 
 // KanbanColumn component it shows each column in the board
-const KanbanColumn = ({ title, headingColor, column, cards }: Props) => {
+const KanbanColumn = ({
+  title,
+  headingColor,
+  column,
+  cards,
+  setCards,
+}: Props) => {
   // When hovering over a card in each column, set 'active' to true and change the column's background color.
   const [active] = useState(false);
 
@@ -30,6 +37,7 @@ const KanbanColumn = ({ title, headingColor, column, cards }: Props) => {
           <KanbanCard key={card.id} {...card} />
         ))}
         <DropIndicator beforeId="-1" column={column} />
+        <KanbanAddCard column={column} setCards={setCards} />
       </div>
     </div>
   );
