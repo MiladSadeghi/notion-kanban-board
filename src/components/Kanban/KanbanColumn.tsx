@@ -1,5 +1,5 @@
 import { DropIndicator, KanbanAddCard, KanbanCard } from '@components';
-import { useState } from 'react';
+import { DragEvent, useState } from 'react';
 
 type Props = {
   title: 'Backlog' | 'TODO' | 'In progress' | 'Complete';
@@ -20,6 +20,13 @@ const KanbanColumn = ({
   // When hovering over a card in each column, set 'active' to true and change the column's background color.
   const [active] = useState(false);
 
+  function handleDragStart(
+    event: DragEvent<HTMLDivElement>,
+    card: IKanbanInfo,
+  ) {
+    event?.dataTransfer?.setData('cardId', card.id);
+  }
+
   // Filter card props: Each column gets its own set of individual cards.
   const filteredCards = cards.filter((card) => card.column === column);
   return (
@@ -34,7 +41,11 @@ const KanbanColumn = ({
         className={`h-full w-full transition-colors p-3 rounded-md ${active ? 'bg-neutral-800/50' : 'bg-[#262626]'}`}
       >
         {filteredCards.map((card) => (
-          <KanbanCard key={card.id} {...card} />
+          <KanbanCard
+            key={card.id}
+            handleDragStart={handleDragStart}
+            {...card}
+          />
         ))}
         <DropIndicator beforeId="-1" column={column} />
         <KanbanAddCard column={column} setCards={setCards} />

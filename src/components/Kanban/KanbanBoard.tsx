@@ -36,7 +36,7 @@ function KanbanBoard() {
         cards={cards}
         setCards={setCards}
       />
-      <KanbanRemove />
+      <KanbanRemove setCards={setCards} />
     </div>
   );
 }
