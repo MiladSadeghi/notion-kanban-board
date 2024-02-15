@@ -18,13 +18,30 @@ const KanbanColumn = ({
   setCards,
 }: Props) => {
   // When hovering over a card in each column, set 'active' to true and change the column's background color.
-  const [active] = useState(false);
+  const [active, setActive] = useState(false);
 
+  // handle card when start dragging
   function handleDragStart(
     event: DragEvent<HTMLDivElement>,
     card: IKanbanInfo,
   ) {
     event?.dataTransfer?.setData('cardId', card.id);
+  }
+
+  // column background will change when a card is dragged onto it
+  function handleDragOver(event: DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    setActive(true);
+  }
+
+  // column background returns to normal when a card is dragged out
+  function handleDragLeave() {
+    setActive(false);
+  }
+
+  // column background returns to normal when a card is dropped on it
+  function handleDragEnd() {
+    setActive(false);
   }
 
   // Filter card props: Each column gets its own set of individual cards.
@@ -38,7 +55,10 @@ const KanbanColumn = ({
         </span>
       </div>
       <div
-        className={`h-full w-full transition-colors p-3 rounded-md ${active ? 'bg-neutral-800/50' : 'bg-[#262626]'}`}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDragEnd}
+        className={`h-full w-full transition-colors p-3 rounded-md ${active ? 'bg-black' : 'bg-[#262626]'}`}
       >
         {filteredCards.map((card) => (
           <KanbanCard

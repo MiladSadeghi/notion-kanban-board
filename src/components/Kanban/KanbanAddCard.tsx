@@ -1,5 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
+import { motion } from 'framer-motion';
 
 type Props = {
   column: 'backlog' | 'todo' | 'doing' | 'done';
@@ -33,7 +34,7 @@ function KanbanAddCard({ column, setCards }: Props) {
   return (
     <>
       {adding ? (
-        <form onSubmit={handleSubmit}>
+        <motion.form layout onSubmit={handleSubmit}>
           <textarea
             autoFocus={true}
             placeholder="Add new task..."
@@ -55,15 +56,16 @@ function KanbanAddCard({ column, setCards }: Props) {
               <FiPlus />
             </button>
           </div>
-        </form>
+        </motion.form>
       ) : (
-        <button
+        <motion.button
+          layout
           onClick={() => setAdding(true)}
           className="flex w-full items-center gap-1.5 px-3 py-1.5 text-sm text-neutral-400 transition-colors hover:text-neutral-50"
         >
           <span>Add Card</span>
           <FiPlus />
-        </button>
+        </motion.button>
       )}
     </>
   );
