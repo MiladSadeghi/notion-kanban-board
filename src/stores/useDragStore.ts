@@ -2,10 +2,9 @@ import { create } from 'zustand';
 
 const useDragStore = create<IDragStore>()((set) => ({
   isDragging: false,
-  setIsDragging: (isDragging) => {
-    console.log(isDragging);
-    set({ isDragging });
-  },
+  cardColumn: null,
+  setIsDragging: (isDragging, cardColumn = null) =>
+    set({ isDragging, cardColumn }),
 }));
 
 export default useDragStore;

@@ -1,4 +1,4 @@
-import { KanbanColumn, KanbanRemove } from '@components';
+import { KanbanColumn } from '@components';
 import Cards from '@shared/Cards';
 import { useState } from 'react';
 
@@ -36,7 +36,6 @@ function KanbanBoard() {
         cards={cards}
         setCards={setCards}
       />
-      <KanbanRemove setCards={setCards} />
     </div>
   );
 }

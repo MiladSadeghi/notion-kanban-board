@@ -1,4 +1,9 @@
-import { DropIndicator, KanbanAddCard, KanbanCard } from '@components';
+import {
+  DropIndicator,
+  KanbanAddCard,
+  KanbanCard,
+  KanbanRemove,
+} from '@components';
 import { DragEvent, useState } from 'react';
 import { useDragStore } from '@stores';
 
@@ -20,7 +25,7 @@ const KanbanColumn = ({
 }: Props) => {
   // When hovering over a card in each column, set 'active' to true and change the column's background color.
   const [active, setActive] = useState(false);
-  const { setIsDragging } = useDragStore();
+  const { isDragging, cardColumn, setIsDragging } = useDragStore();
 
   // handle card when start dragging
   function handleDragStart(
@@ -28,7 +33,7 @@ const KanbanColumn = ({
     card: IKanbanInfo,
   ) {
     event?.dataTransfer?.setData('cardId', card.id);
-    setIsDragging(true);
+    setIsDragging(true, column);
   }
 
   // column background will change when a card is dragged onto it
@@ -154,7 +159,7 @@ const KanbanColumn = ({
   // Filter card props: Each column gets its own set of individual cards
   const filteredCards = cards.filter((card) => card.column === column);
   return (
-    <div className="flex flex-col shrink-0">
+    <div className="relative flex flex-col shrink-0">
       <div className="flex items-center justify-between mb-3 ">
         <h3 className={`font-medium ${headingColor}`}>{title}</h3>
         <span className="text-sm rounded text-neutral-400">
@@ -177,6 +182,9 @@ const KanbanColumn = ({
         <DropIndicator beforeId="-1" column={column} />
         <KanbanAddCard column={column} setCards={setCards} />
       </div>
+      {isDragging && cardColumn === column && (
+        <KanbanRemove setCards={setCards} />
+      )}
     </div>
   );
 };

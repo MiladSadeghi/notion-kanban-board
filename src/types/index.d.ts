@@ -9,5 +9,9 @@ type TSetState<T> = Dispatch<SetStateAction<T>>;
 
 interface IDragStore {
   isDragging: boolean;
-  setIsDragging: (isDragging: boolean) => void;
+  cardColumn: 'backlog' | 'todo' | 'doing' | 'done' | null;
+  setIsDragging: (
+    isDragging: boolean,
+    cardColumn?: 'backlog' | 'todo' | 'doing' | 'done' | null,
+  ) => void;
 }
