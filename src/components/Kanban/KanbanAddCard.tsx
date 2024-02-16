@@ -65,6 +65,7 @@ function KanbanAddCard({ column, setCards }: Props) {
             <div className="flex items-center group">
               {colors.map((color) => (
                 <button
+                  key={color}
                   type="button"
                   onClick={() => setColor(color)}
                   className={`w-5 h-5 rounded-full ${color} border border-slate-500 mr-2 sm:mr-0 sm:-ml-2 first-of-type:ml-0 sm:group-hover:ml-0 transition-all sm:group-hover:mr-2`}
@@ -78,6 +79,7 @@ function KanbanAddCard({ column, setCards }: Props) {
                 />
               )}
               <button
+                type="button"
                 onClick={() => setAdding(false)}
                 className="px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
               >

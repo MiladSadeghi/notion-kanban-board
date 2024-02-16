@@ -6,3 +6,8 @@ interface IKanbanInfo {
 }
 
 type TSetState<T> = Dispatch<SetStateAction<T>>;
+
+interface IDragStore {
+  isDragging: boolean;
+  setIsDragging: (isDragging: boolean) => void;
+}

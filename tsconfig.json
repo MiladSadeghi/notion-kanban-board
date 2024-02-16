@@ -9,7 +9,8 @@
     "paths": {
       "@components": ["components/index.ts"],
       "@types": ["types/index.d.ts"],
-      "@shared/*": ["shared/*"]
+      "@shared/*": ["shared/*"],
+      "@stores": ["stores/index.ts"]
     },
 
     /* Bundler mode */

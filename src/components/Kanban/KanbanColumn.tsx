@@ -1,5 +1,6 @@
 import { DropIndicator, KanbanAddCard, KanbanCard } from '@components';
 import { DragEvent, useState } from 'react';
+import { useDragStore } from '@stores';
 
 type Props = {
   title: 'Backlog' | 'TODO' | 'In progress' | 'Complete';
@@ -19,6 +20,7 @@ const KanbanColumn = ({
 }: Props) => {
   // When hovering over a card in each column, set 'active' to true and change the column's background color.
   const [active, setActive] = useState(false);
+  const { setIsDragging } = useDragStore();
 
   // handle card when start dragging
   function handleDragStart(
@@ -26,6 +28,7 @@ const KanbanColumn = ({
     card: IKanbanInfo,
   ) {
     event?.dataTransfer?.setData('cardId', card.id);
+    setIsDragging(true);
   }
 
   // column background will change when a card is dragged onto it
@@ -45,6 +48,7 @@ const KanbanColumn = ({
   function handleDragEnd(event: DragEvent<HTMLDivElement>) {
     setActive(false);
     clearHighlights();
+    setIsDragging(false);
 
     // get card id from dropped card
     const cardId = event.dataTransfer.getData('cardId');

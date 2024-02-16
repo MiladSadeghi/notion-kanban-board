@@ -1,6 +1,7 @@
 import { DropIndicator } from '@components';
 import { DragEvent } from 'react';
 import { motion } from 'framer-motion';
+import { useDragStore } from '@stores';
 
 type Props = IKanbanInfo & {
   handleDragStart: (
@@ -10,6 +11,7 @@ type Props = IKanbanInfo & {
 };
 
 function KanbanCard({ id, title, column, bgColor, handleDragStart }: Props) {
+  const { setIsDragging } = useDragStore();
   return (
     <>
       <DropIndicator beforeId={id} column={column} />
@@ -17,6 +19,7 @@ function KanbanCard({ id, title, column, bgColor, handleDragStart }: Props) {
         layout
         layoutId={id}
         draggable={true}
+        onDragEnd={() => setIsDragging(false)}
         onDragStart={(event) =>
           handleDragStart(event as unknown as DragEvent<HTMLDivElement>, {
             id,
