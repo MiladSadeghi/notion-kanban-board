@@ -10,7 +10,7 @@ type Props = {
 // KanbanRemove is a component where users can grab a Kanban card and drop it to remove it.
 function KanbanRemove({ setCards }: Props) {
   const [active, setActive] = useState(false);
-  const { isDragging, setIsDragging } = useDragStore();
+  const { setIsDragging } = useDragStore();
 
   function handleDragOver(event: DragEvent<HTMLDivElement>) {
     event.preventDefault();
@@ -27,7 +27,9 @@ function KanbanRemove({ setCards }: Props) {
     setCards((prevCards: IKanbanInfo[]) =>
       prevCards.filter((card) => card.id !== cardId),
     );
-    setActive(false);
+    setTimeout(() => {
+      setActive(false);
+    }, 130);
     setIsDragging(false);
   }
 
@@ -36,9 +38,13 @@ function KanbanRemove({ setCards }: Props) {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDragEnd}
-      className={`absolute bottom-[25px] right-[25px] grid w-56 h-56 text-3xl border rounded place-content-center transition-opacity ${active ? 'border-red-800 bg-red-800/20 text-red' : 'border-neutral-500 bg-neutral-500/40 text-neutral-500'} ${isDragging ? 'opacity-100' : 'opacity-0'}`}
+      className={`absolute grid w-full h-36 bottom-0 text-3xl  pt-10 justify-center transition-all duration-200 overflow-hidden ${active ? 'bg-gradient-to-b from-transparent  to-red-800/60 text-neutral-300' : 'bg-gradient-to-b from-transparent to-neutral-500/40 text-neutral-300'}`}
     >
-      {active ? <FaFire className="animate-bounce" /> : <FiTrash />}
+      {active ? (
+        <FaFire size={80} className="mt-1" />
+      ) : (
+        <FiTrash size={80} className="mt-1" />
+      )}
     </div>
   );
 }

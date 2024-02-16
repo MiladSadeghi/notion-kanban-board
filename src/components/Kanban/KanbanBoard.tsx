@@ -1,4 +1,4 @@
-import { KanbanColumn, KanbanRemove } from '@components';
+import { KanbanColumn } from '@components';
 import Cards from '@shared/Cards';
 import { useState } from 'react';
 
@@ -7,7 +7,7 @@ function KanbanBoard() {
   const [cards, setCards] = useState<IKanbanInfo[]>(Cards);
 
   return (
-    <div className="relative grid w-full h-full grid-cols-4 p-12 gap-14">
+    <div className="relative grid w-full h-full p-12 md:grid-cols-2 lg:grid-cols-4 gap-14">
       <KanbanColumn
         title="Backlog"
         column="backlog"
@@ -36,7 +36,6 @@ function KanbanBoard() {
         cards={cards}
         setCards={setCards}
       />
-      <KanbanRemove setCards={setCards} />
     </div>
   );
 }
