@@ -26,6 +26,7 @@ const KanbanColumn = ({
   // When hovering over a card in each column, set 'active' to true and change the column's background color.
   const [active, setActive] = useState(false);
   const { isDragging, cardColumn, setIsDragging } = useDragStore();
+
   const columnRef = useRef<HTMLDivElement>(null);
 
   function detectLeftButton(event: PointerEventGen<HTMLDivElement>) {
@@ -39,6 +40,7 @@ const KanbanColumn = ({
     cardId: string,
     index: number,
   ) {
+
     if (!detectLeftButton(event)) return;
     setIsDragging(true, column, cardId);
     const currentColumn = columnRef?.current;
@@ -53,6 +55,7 @@ const KanbanColumn = ({
       }
       return false;
     });
+
 
     const dragItem = items[index];
     const itemsBellowDraggedItems = items.slice(index + 1);
