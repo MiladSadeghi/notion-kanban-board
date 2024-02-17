@@ -1,7 +1,7 @@
 interface IKanbanInfo {
   id: string;
   title: string;
-  column: 'backlog' | 'todo' | 'doing' | 'done';
+  column: string;
   bgColor: string;
 }
 
@@ -9,9 +9,6 @@ type TSetState<T> = Dispatch<SetStateAction<T>>;
 
 interface IDragStore {
   isDragging: boolean;
-  cardColumn: 'backlog' | 'todo' | 'doing' | 'done' | null;
-  setIsDragging: (
-    isDragging: boolean,
-    cardColumn?: 'backlog' | 'todo' | 'doing' | 'done' | null,
-  ) => void;
+  cardColumn: string | null;
+  setIsDragging: (isDragging: boolean, cardColumn?: string | null) => void;
 }

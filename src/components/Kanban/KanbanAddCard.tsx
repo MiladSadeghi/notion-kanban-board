@@ -3,7 +3,7 @@ import { FiPlus } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 
 type Props = {
-  column: 'backlog' | 'todo' | 'doing' | 'done';
+  column: string;
   setCards: TSetState<IKanbanInfo[]>;
 };
 

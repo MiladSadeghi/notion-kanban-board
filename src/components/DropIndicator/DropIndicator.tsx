@@ -1,6 +1,6 @@
 type Props = {
   beforeId: string;
-  column: 'backlog' | 'todo' | 'doing' | 'done';
+  column: string;
 };
 
 // DropIndicator is just indicator and will place in between cards

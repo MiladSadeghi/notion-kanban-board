@@ -4,12 +4,12 @@ import {
   KanbanCard,
   KanbanRemove,
 } from '@components';
-import { DragEvent, useState } from 'react';
+import { ChangeEvent, DragEvent, KeyboardEvent, useState } from 'react';
 import { useDragStore } from '@stores';
 
 type Props = {
-  title: 'Backlog' | 'TODO' | 'In progress' | 'Complete';
-  column: 'backlog' | 'todo' | 'doing' | 'done';
+  title: string;
+  column: string;
   headingColor: string;
   cards: IKanbanInfo[];
   setCards: TSetState<IKanbanInfo[]>;
@@ -26,6 +26,11 @@ const KanbanColumn = ({
   // When hovering over a card in each column, set 'active' to true and change the column's background color.
   const [active, setActive] = useState(false);
   const { isDragging, cardColumn, setIsDragging } = useDragStore();
+  const [isColumnTitleClicked, setIsColumnTitleClicked] = useState(false);
+  const [columnTitle, setColumnTitle] = useState(title);
+
+  // Filter card props: Each column gets its own set of individual cards
+  const filteredCards = cards.filter((card) => card.column === column);
 
   // handle card when start dragging
   function handleDragStart(
@@ -156,12 +161,36 @@ const KanbanColumn = ({
     }
   }
 
-  // Filter card props: Each column gets its own set of individual cards
-  const filteredCards = cards.filter((card) => card.column === column);
+  function handleColumnTitleInput(e: ChangeEvent<HTMLInputElement>) {
+    setColumnTitle(e.target.value);
+  }
+
+  function HandleEnterKey(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter') {
+      setIsColumnTitleClicked(false);
+      return;
+    }
+  }
+
   return (
     <div className="relative flex flex-col shrink-0">
       <div className="flex items-center justify-between mb-3 ">
-        <h3 className={`font-medium ${headingColor}`}>{title}</h3>
+        {isColumnTitleClicked ? (
+          <input
+            value={columnTitle}
+            autoFocus
+            className={`${headingColor} font-medium bg-black outline-none`}
+            onChange={(e) => handleColumnTitleInput(e)}
+            onKeyDown={HandleEnterKey}
+          />
+        ) : (
+          <h3
+            onClick={() => setIsColumnTitleClicked(true)}
+            className={`font-medium ${headingColor}`}
+          >
+            {columnTitle}
+          </h3>
+        )}
         <span className="text-sm rounded text-neutral-400">
           {filteredCards.length}
         </span>
