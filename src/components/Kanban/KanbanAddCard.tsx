@@ -8,12 +8,12 @@ type Props = {
 };
 
 const colors = [
-  'bg-[#DA3A3A]',
-  'bg-[#C94AA8]',
-  'bg-[#7678D1]',
-  'bg-[#00B294]',
-  'bg-[#3F88E4]',
-  'bg-blue-600',
+  '218, 58, 58',
+  '201, 74, 168',
+  '118, 120, 209',
+  '0, 178, 148',
+  '63, 136, 228',
+  '37, 99, 235',
 ];
 
 // With KanbanAddCard, you can make new cards in each column
@@ -59,7 +59,15 @@ function KanbanAddCard({ column, setCards }: Props) {
             autoFocus={true}
             placeholder="Add new task..."
             onChange={(e) => setText(e.currentTarget.value)}
-            className="w-full p-3 text-sm border rounded border-violet-400 bg-violet-400/20 text-neutral-50 placeholder-violet-300 focus:outline-0"
+            style={{
+              backgroundColor: color
+                ? `rgba(${color}, 0.2)`
+                : 'rgb(167, 139, 250, 0.2)',
+              borderColor: color
+                ? `rgba(${color}, 0.6)`
+                : 'rgb(167, 139, 250, 0.6)',
+            }}
+            className={`w-full p-3 text-sm border rounded  text-neutral-50 placeholder-neutral-400 !bg-opacity-20 focus:outline-0 `}
           />
           <div className="mt-1.5 flex justify-between ">
             <div className="flex items-center group">
@@ -68,16 +76,12 @@ function KanbanAddCard({ column, setCards }: Props) {
                   key={color}
                   type="button"
                   onClick={() => setColor(color)}
-                  className={`w-5 h-5 rounded-full ${color} border border-slate-500 mr-2 sm:mr-0 sm:-ml-2 first-of-type:ml-0 sm:group-hover:ml-0 transition-all sm:group-hover:mr-2`}
+                  style={{ backgroundColor: `rgba(${color}, 1)` }}
+                  className={`w-5 h-5 rounded-full border border-slate-500 mr-2 sm:mr-0 sm:-ml-2 first-of-type:ml-0 sm:group-hover:ml-0 transition-all sm:group-hover:mr-2`}
                 />
               ))}
             </div>
-            <div className="flex items-center justify-end gap-1.5">
-              {color && (
-                <div
-                  className={`border border-slate-500 w-5 h-5 rounded-full ${color}`}
-                />
-              )}
+            <div className="mt-1.5 flex items-center">
               <button
                 type="button"
                 onClick={() => setAdding(false)}
